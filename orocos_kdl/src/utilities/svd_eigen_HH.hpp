@@ -55,16 +55,17 @@ namespace KDL
     }
 
     /**
-     * svd calculation of eigen matrices
+     * Singular value decomposition based on household rotations
      *
-     * @param A matrix<double>(mxn)
-     * @param U matrix<double>(mxn)
-     * @param S vector<double> n
-     * @param V matrix<double>(nxn)
-     * @param tmp vector<double> n
+     * @param A matrix(mxn) From where singular values are computed
+     * @param U matrix(mxn) Left singular vectors stored here
+     * @param S vector(n)   Singular values stored here
+     * @param V matrix(nxn) Right singular vectors stored here
+     * @param tmp vector(n) Storing temporal data
      * @param maxiter defaults to 150
+     * @param epsilon defaults to 1e-300
      *
-     * @return -2 if maxiter exceeded, 0 otherwise
+     * @return 0 if no errors, -2 if maxiter exceeded, < -2 for numerical erors
      */
     int svd_eigen_HH(const MatrixXd& A,MatrixXd& U,VectorXd& S,MatrixXd& V,VectorXd& tmp,int maxiter=150,double epsilon=1e-300);
 }
