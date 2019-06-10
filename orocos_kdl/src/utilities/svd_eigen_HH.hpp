@@ -50,8 +50,8 @@ namespace KDL
     }
 
 
-    inline double SIGN(double a,double b) {
-        return ((b) >= 0.0 ? fabs(a) : -fabs(a));
+    inline double COPY_SIGN(double target,double source) {
+        return ((source) >= 0.0 ? fabs(target) : -fabs(target));
     }
 
     /**
