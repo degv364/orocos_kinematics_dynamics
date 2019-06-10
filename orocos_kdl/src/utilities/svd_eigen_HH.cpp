@@ -53,14 +53,14 @@ namespace KDL{
                         s += U(k,i)*U(k,i);
                     }
                     f=U(i,i);  // f is the diag elem
-					if (!(s>=0)) return -3;
+		    if (s < 0) return -3;
                     g = -SIGN(sqrt(s),f);
                     h=f*g-s;
                     U(i,i)=f-g;
                     for (j=ppi;j<cols;j++) {
                         // dot product of columns i and j, starting from the i-th row
                         for (s=0.0,k=i;k<rows;k++) s += U(k,i)*U(k,j);
-						if (!(h!=0)) return -4;
+			if (h == 0) return -4;
                         f=s/h;
                         // copy the scaled i-th column into the j-th column
                         for (k=i;k<rows;k++) U(k,j) += f*U(k,i);
@@ -80,11 +80,11 @@ namespace KDL{
                         s += U(i,k)*U(i,k);
                     }
                     f=U(i,ppi);
-					if (!(s>=0)) return -5;
+		    if (s < 0) return -5;
                     g = -SIGN(sqrt(s),f);
                     h=f*g-s;
                     U(i,ppi)=f-g;
-					if (!(h!=0)) return -6;
+		    if (h == 0) return -6;
                     for (k=ppi;k<cols;k++) tmp(k)=U(i,k)/h;
                     for (j=ppi;j<rows;j++) {
                         for (s=0.0,k=ppi;k<cols;k++) s += U(j,k)*U(i,k);
@@ -98,12 +98,12 @@ namespace KDL{
         for (i=cols-1;i>=0;i--) {
             if (i<cols-1) {
                 if (fabs(g)>epsilon) {
-					if (!(U(i,ppi)!=0)) return -7;
-                    for (j=ppi;j<cols;j++) V(j,i)=(U(i,j)/U(i,ppi))/g;
-                    for (j=ppi;j<cols;j++) {
-                        for (s=0.0,k=ppi;k<cols;k++) s += U(i,k)*V(k,j);
-                        for (k=ppi;k<cols;k++) V(k,j) += s*V(k,i);
-                    }
+		    if (U(i,ppi) == 0) return -7;
+		    for (j=ppi;j<cols;j++) V(j,i)=(U(i,j)/U(i,ppi))/g;
+		    for (j=ppi;j<cols;j++) {
+		        for (s=0.0,k=ppi;k<cols;k++) s += U(i,k)*V(k,j);
+		        for (k=ppi;k<cols;k++) V(k,j) += s*V(k,i);
+		    }
                 }
                 for (j=ppi;j<cols;j++) V(i,j)=V(j,i)=0.0;
             }
@@ -120,7 +120,7 @@ namespace KDL{
                 g=1.0/g;
                 for (j=ppi;j<cols;j++) {
                     for (s=0.0,k=ppi;k<rows;k++) s += U(k,i)*U(k,j);
-					if (!(U(i,i)!=0)) return -8;
+		    if (U(i,i) == 0) return -8;
                     f=(s/U(i,i))*g;
                     for (k=i;k<rows;k++) U(k,j) += f*U(k,i);
                 }
@@ -153,7 +153,7 @@ namespace KDL{
                         g=S(i);
                         h=PYTHAG(f,g);
                         S(i)=h;
-						if (!(h!=0)) return -9;
+			if (h == 0) return -9;
                         h=1.0/h;
                         c=g*h;
                         s=(-f*h);
@@ -167,7 +167,7 @@ namespace KDL{
                 }
                 z=S(k);
                 
-                if (ppi == k) {       /* Convergence. */
+                if (ppi == k) {      /* Convergence. */
                     if (z < 0.0) {   /* Singular value is made nonnegative. */
                         S(k) = -z;
                         for (j=0;j<cols;j++) V(j,k)=-V(j,k);
@@ -180,12 +180,12 @@ namespace KDL{
                 y=S(nm);
                 g=tmp(nm);
                 h=tmp(k);
-				if (!(h!=0&&y!=0)) return -10;
+		if (h == 0 || y == 0) return -10;
                 f=((y-z)*(y+z)+(g-h)*(g+h))/(2.0*h*y);
                 
                 g=PYTHAG(f,1.0);
-				if (!(x!=0)) return -11;
-				if (!((f+SIGN(g,f))!=0)) return -12;
+		if (x == 0) return -11;
+		if (f + SIGN(g,f) == 0) return -12;
                 f=((x-z)*(x+z)+h*((y/(f+SIGN(g,f)))-h))/x;
                 
                 /* Next QR transformation: */
@@ -198,7 +198,7 @@ namespace KDL{
                     g=c*g;
                     z=PYTHAG(f,h);
                     tmp(j)=z;
-					if (!(z!=0)) return -13;
+		    if (z == 0) return -13;
                     c=f/z;
                     s=h/z;
                     f=x*c+g*s;
@@ -260,6 +260,6 @@ namespace KDL{
         if (its == maxiter) 
             return (-2);
         else 
-            return (0);
+	    return (0);
     }
 }
