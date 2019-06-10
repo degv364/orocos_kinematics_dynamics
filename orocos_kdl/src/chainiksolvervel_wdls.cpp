@@ -131,13 +131,6 @@ namespace KDL
         sigmaMin = 0.;
         lambda_scaled = 0.;
 
-        /*
-        for (i=0;i<jac.rows();i++) {
-            for (j=0;j<jac.columns();j++)
-                tmp_jac(i,j) = jac(i,j);
-        }
-        */
-
         // Create the Weighted jacobian
         tmp_jac_weight1 = jac.data.lazyProduct(weight_js);
         tmp_jac_weight2 = weight_ts.lazyProduct(tmp_jac_weight1);
@@ -194,16 +187,6 @@ namespace KDL
             }
         }
 
-        /*
-        // x = Lx^-1*V*tmp + x
-        for (i=0;i<jac.columns();i++) {
-            sum = 0.0;
-            for (j=0;j<jac.columns();j++) {
-                sum+=tmp_js(i,j)*tmp(j);
-            }
-            qdot_out(i)=sum;
-        }
-        */
         qdot_out.data=tmp_js.lazyProduct(tmp);
 
         // If number of near zero singular values is greater than the full rank

@@ -148,7 +148,7 @@ namespace KDL{
                     for (i=ppi;i<=k;i++) {
                         f=s*tmp(i);
                         tmp(i)=c*tmp(i);
-                        if (f) break;
+                        if (f==0) break;
                         g=S(i);
                         h=PYTHAG(f,g);
                         S(i)=h;

@@ -155,7 +155,6 @@ namespace KDL
           tmp2 = V * Sinv.asDiagonal() * U.transpose() * U * S.asDiagonal() * V.transpose() * tmp;
 
           for (i = 0; i < nj; ++i) {
-              //std::cerr << i <<": "<< qdot_out(i) <<", "<< -2*alpha*g * (tmp(i) - tmp2(i)) << std::endl;
               qdot_out(i) += -2*alpha*g * (tmp(i) - tmp2(i));
           }
         }
