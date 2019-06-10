@@ -34,8 +34,8 @@ namespace KDL{
 
         int i(-1),its(-1),j(-1),jj(-1),k(-1),nm=0;
         int ppi(0);
-        bool flag,maxarg1,maxarg2;
-        double anorm(0),c(0),f(0),h(0),s(0),scale(0),x(0),y(0),z(0),g(0);
+        bool flag;
+        double c(0),f(0),h(0),s(0),scale(0),x(0),y(0),z(0),g(0);
 
         /* Householder reduction to bidiagonal form. */
         for (i=0;i<cols;i++) {
@@ -93,9 +93,6 @@ namespace KDL{
                     for (k=ppi;k<cols;k++) U(i,k) *= scale;
                 }
             }
-            maxarg1=anorm;
-            maxarg2=(fabs(S(i))+fabs(tmp(i)));
-            anorm = maxarg1 > maxarg2 ?	maxarg1 : maxarg2;		
         }
         /* Accumulation of right-hand transformations. */
         for (i=cols-1;i>=0;i--) {
@@ -140,11 +137,11 @@ namespace KDL{
                 flag=true;
                 for (ppi=k;ppi>=0;ppi--) {  /* Test for splitting. */
                     nm=ppi-1;             /* Note that tmp[1] is always zero. */
-                    if ((fabs(tmp(ppi))+anorm) == anorm) {
+                    if (tmp(ppi)==0) {
                         flag=false;
                         break;
                     }
-                    if ((fabs(S(nm)+anorm) == anorm)) break;
+                    if (S(nm)==0) break;
                 }
                 if (flag) {
                     c=0.0;           /* Cancellation of tmp[l], if l>1: */
@@ -152,7 +149,7 @@ namespace KDL{
                     for (i=ppi;i<=k;i++) {
                         f=s*tmp(i);
                         tmp(i)=c*tmp(i);
-                        if ((fabs(f)+anorm) == anorm) break;
+                        if (f) break;
                         g=S(i);
                         h=PYTHAG(f,g);
                         S(i)=h;
